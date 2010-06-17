@@ -1,20 +1,20 @@
-TS.DOMUtils = {
+DOMUtils = {
 
-	is : function($element, selector){
-		return element.is(selector);
+	is : function(element, selector){
+		return $(element).is(selector);
 	},
 
 	contains : function($element1, $element2){
 		return $element1.has($element2);
 	},
 
-	getFirstAncestorOrSelf : function($element, selector){
-		var $result = $element.closest(selector);
+	getFirstAncestorOrSelf : function(element, selector){
+		var $result = $(element).closest(selector);
 		return $result;
 	},
 
-	getDescendantsAndSelf : function($element, selector){
-		var $result = $element.find('*').andSelf().filter(selector);
+	getDescendantsAndSelf : function(element, selector){
+		var $result = $(element).find('*').andSelf().filter(selector);
 		return $result;
 	},
 
@@ -28,18 +28,18 @@ TS.DOMUtils = {
 		return ancestors.last();
 	},
 
-	getAncestorsAndSelf : function($element, selector){ //Returns elements in document order
+	getAncestorsAndSelf : function(element, selector){ //Returns elements in document order
 		if ( typeof selector === 'undefined' ){
 			selector = '*';
 		}
-		var $result = $element.parents().andSelf().filter(selector);
+		var $result = $(element).parents().andSelf().filter(selector);
 		return $result; 
 	},
 
 	getSiblingsBetweenAndSelves : function($firstSibling, $lastSibling){
-		var firstSiblingIndex = $firstSibling.index();
-		var lastSiblingIndex = $lastSibling.index();
-		var $result = $firstSibling.parent().children().slice(firstSiblingIndex, lastSiblingIndex +1);
+		var firstSiblingIndex = $($firstSibling).index();
+		var lastSiblingIndex = $($lastSibling).index();
+		var $result = $($firstSibling).parent().children().slice(firstSiblingIndex, lastSiblingIndex + 1);
 		return $result;
 	},
 
@@ -47,23 +47,23 @@ TS.DOMUtils = {
 		if ($startElement.filter($endElement).length > 0){ //Then they are the same element
 			return $startElement;
 		} else {
-			var $startAncestors = getAncestorsAndSelf($startElement);
-			var $endAncestors = getAncestorsAndSelf($endElement);
+			var $startAncestors = DOMUtils.getAncestorsAndSelf($startElement);
+			var $endAncestors = DOMUtils.getAncestorsAndSelf($endElement);
 			if ($startAncestors[0] !== $endAncestors[0]){
 				return null;
 			} else {
 				for (var i = 0; i < Math.min($startAncestors.length, $endAncestors.length); i++){
 					if ($startAncestors[i] !== $endAncestors[i]){
-						return getSiblingsBetweenAndSelves($startAncestors[i], $endAncestors[i]);
+						return DOMUtils.getSiblingsBetweenAndSelves($startAncestors[i], $endAncestors[i]);
 					}
 				}
 			}
 		}		
 	},
 
-	getTextNodes : function($element){ //Returns all descendant text nodes
+	getTextNodes : function(element){ //Returns all descendant text nodes
 		var result = [];
-		$element.contents().each(function(){
+		$(element).contents().each(function(){
 			var fn = arguments.callee;
 			if (this.nodeType == 3){ 
 				result.push(this);
@@ -74,8 +74,8 @@ TS.DOMUtils = {
 		return result;
 	},
 
-	getText = function($element){ 
-		return $element.text();
+	getText : function(element) { 
+		return $(element).text();
 	}
 
 }

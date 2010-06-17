@@ -1,15 +1,4 @@
-YUI.add('selection', function(Y){
-
-	var Selection;
-	var DOMUtils = Y.Ts4isha.DOMUtils;
-
-	Selection = function(config){
-
-		Selection.superclass.constructor.apply(this, arguments);
-
-	};
-
-	Y.extend(Selection, Y.Base, {
+SelectionManager = {
 
 		// *** Instance Members *** //
 
@@ -19,14 +8,6 @@ YUI.add('selection', function(Y){
 							startOffset : 0,
 							endOffset : -1  //endOffset =-1 means end of the node 
 						},
-
-		// *** Base Methods *** //
-
-		initializer : function(config){
-
-		},
-
-		destructor : function(){},
 
 		// *** Public Methods *** //
 
@@ -50,7 +31,7 @@ YUI.add('selection', function(Y){
 			sel.addRange(newRange);
 		},
 
-		expandSelection : function(e){		//Mozilla specific code - based on selection API
+		expandSelection : function() {		//Mozilla specific code - based on selection API
 
 			var selection = window.getSelection();
 			var range = selection.getRangeAt(0);
@@ -64,11 +45,15 @@ YUI.add('selection', function(Y){
 			var endSegment = null;
 			var startOffset = 0;
 			var endOffset = -1;  //setting endOffset to -1 means we will set the range to the end of the element
-	
-			if ( DOMUtils.is(startElement, '.segment') && startElement === endElement ){
+
+      this._rangeToFullWords(range);
+
+      //JQuery objects are stored as array it seems. Comparing two JQuery objects
+      //using normal comparators won't work. 
+      //http://chris-barr.com/entry/comparing_jquery_objects/
+			if ( DOMUtils.is(startElement, '.segment') && startElement[0] === endElement[0]) {
 			//selection starts and ends in a single segment
 
-				this._rangeToFullWords(range);
 				startOffset = range.startOffset;
 				endOffset = range.endOffset;
 				var startContent = DOMUtils.getFirstAncestorOrSelf(startNode, '.content');
@@ -83,7 +68,6 @@ YUI.add('selection', function(Y){
 				this._expandAccordingToSuperContents();
 				this.select();
 				return;
-
 			} else if ( DOMUtils.is(startElement, '.heading') ){
 			//selection starts in a header
 
@@ -92,6 +76,7 @@ YUI.add('selection', function(Y){
 				endSegment = DOMUtils.getDescendantsAndSelf(startParentSuperSegment, '.segment');	
 
 				if ( !DOMUtils.contains(startParentSuperSegment, endElement) ){
+				  alert("selection ends outside parent superSegment.");
 				//selection ends outside parent superSegment 
 					if ( DOMUtils.is(endElement, '.segment') ){
 						endSegment = endElement;	
@@ -131,27 +116,26 @@ YUI.add('selection', function(Y){
 		},
 
 		_rangeToFullWords : function(range){
-
 			var startNode = range.startContainer;
 			var endNode = range.endContainer;
 			var startNodeText = DOMUtils.getText(startNode);
 			var endNodeText = DOMUtils.getText(endNode);
-			if (!range.collapsed){
+			if (!range.collapsed) {
 				//removes leading spaces from range
-				while(range.toString().charAt(0) == " "){
-					range.setStart(startNode, range.startOffset +1);
+				while(range.toString().charAt(0) == " ") {
+					range.setStart(startNode, range.startOffset + 1);
 				}
 				//removes trailing spaces from range
-				while(range.toString().charAt(range.toString().length -1) == " "){
-					range.setEnd(endNode, range.endOffset -1);
+				while(range.toString().charAt(range.toString().length - 1) == " ") {
+					range.setEnd(endNode, range.endOffset - 1);
 				}
 				//expands range to include whole first word
-				while(range.startOffset > 0 && range.toString().charAt(0) != " " && startNodeText.charAt(range.startOffset -1) != " "){
-					range.setStart(startNode, range.startOffset -1);
+				while(range.startOffset > 0 && range.toString().charAt(0) != " " && startNodeText.charAt(range.startOffset - 1) != " ") {
+					range.setStart(startNode, range.startOffset - 1);
 				}
 				//expands range to include full last word
-				while(range.endOffset < endNodeText.length && range.toString().charAt(range.toString().length -1) != " " && endNodeText.charAt(range.endOffset) != " "){
-					range.setEnd(endNode, range.endOffset +1);
+				while(range.endOffset < endNodeText.length && range.toString().charAt(range.toString().length - 1) != " " && endNodeText.charAt(range.endOffset) != " ") {
+					range.setEnd(endNode, range.endOffset + 1);
 				}
 			}
 		},
@@ -164,26 +148,19 @@ YUI.add('selection', function(Y){
 			if ( DOMUtils.is(ancestorSiblings[0], '.superContent') ){
 				selObj.startOffset = 0;
 			}
-			if ( DOMUtils.is(ancestorSiblings[ancestorSiblings.length -1], '.superContent') ){
+			if ( DOMUtils.is(ancestorSiblings[ancestorSiblings.length - 1], '.superContent') ){
 				selObj.endOffset = -1;
 			}
 		},
 
-		_expandAccordingToHierarchy : function(nodeClass){
+		_expandAccordingToHierarchy : function(nodeClass) {
 
 			var selObj = this.selectionObj;
 			var ancestorSiblings = DOMUtils.getCorrespondingAncestorSiblings(selObj.startNode, selObj.endNode);
-			var firstElement = DOMUtils.getDescendantsAndSelf(ancestorSiblings[0], '.'+nodeClass);
-			var lastSiblingDescendants = DOMUtils.getDescendantsAndSelf(ancestorSiblings[ancestorSiblings.length -1], '.'+nodeClass);
-			var lastElement = lastSiblingDescendants[lastSiblingDescendants.length -1];
+			var firstElement = DOMUtils.getDescendantsAndSelf(ancestorSiblings[0], '.' + nodeClass);
+			var lastSiblingDescendants = DOMUtils.getDescendantsAndSelf(ancestorSiblings[ancestorSiblings.length - 1], '.' + nodeClass);
+			var lastElement = lastSiblingDescendants[lastSiblingDescendants.length - 1];
 			selObj.startNode = firstElement;
 			selObj.endNode = lastElement;
 		}
-
-	});
-
-	Y.namespace('Ts4isha');
-	
-	Y.Ts4isha.Selection = Selection;
-
-}, '0.0.1', {requires:['utils']});
+	}
