@@ -19,7 +19,7 @@ SelectionManager = {
 			var endNodeTextNodes = DOMUtils.getTextNodes(selObj.endNode)
 			var endTextNode = endNodeTextNodes[endNodeTextNodes.length -1];
 			var endOffset = selObj.endOffset
-			if (endOffset == -1){
+			if (endOffset == -1) {
 				endOffset = endTextNode.length;  //Convert the -1 value to the actual text length - to work with Mozilla range
 			} 
 
@@ -67,7 +67,7 @@ SelectionManager = {
 
 				this._expandAccordingToSuperContents();
 				this.select();
-				return;
+				return range;
 			} else if ( DOMUtils.is(startElement, '.heading') ){
 			//selection starts in a header
 

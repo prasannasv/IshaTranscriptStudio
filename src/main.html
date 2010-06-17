@@ -9,6 +9,7 @@
 		<script type="text/javascript" src="js/transcriptArea.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/selection.js"></script>
+    <script type="text/javascript" src="js/markupManager.js"></script>
 		<!--script type="text/javascript" src="js/referenceManager.js"></script>
 		<script type="text/javascript" src="js/sessionSelector.js"></script>
 		<script type="text/javascript" src="js/transcriptContextMenu.js"></script-->
@@ -37,12 +38,22 @@
 		<div id="transcript"></div>
 
     <script type="text/javascript">
+      function getSessionId() {
+        return document.getElementById("session-id-input").value;
+      }
+      
       function submitform() {
-        TranscriptArea.loadSessionHTML(DatabaseManager, document.getElementById("session-id-input").value);
+        refreshPage();
       }
   
+      function refreshPage() {
+        TranscriptArea.loadSessionHTML(DatabaseManager, getSessionId());
+      }
+
       $('#transcript').mouseup(function() {
-        SelectionManager.expandSelection();
+        var selectionRange = SelectionManager.expandSelection();
+        MarkupManager.addMarkup(DatabaseManager, getSessionId(), selectionRange);
+        refreshPage();
       });
     </script>
 	</body>

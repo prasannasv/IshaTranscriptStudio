@@ -13,7 +13,7 @@ DatabaseManager = {
 
 	executeXQuery: function(xqueryFile, params, resultFormat, successFunc, failureFunc){
 
-		$.ajax({url: this.EXIST_URL+this.XQUERY_PATH+'/'+xqueryFile,
+		$.ajax({url: this.EXIST_URL + this.XQUERY_PATH + '/' + xqueryFile,
 			data: params,
 			type: 'POST',
 			async: true,
@@ -22,5 +22,4 @@ DatabaseManager = {
 			error: failureFunc
 		});
 	}
-
 }
