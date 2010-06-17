@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>TS Tagging Module</title>
+		<link type="text/css" href="js/tagging.css" rel="stylesheet"></link>
+		<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+		<script type="text/javascript" src="js/databaseManager.js"></script>
+		<script type="text/javascript" src="js/transcriptArea.js"></script>
+		<!--script type="text/javascript" src="js/referenceManager.js"></script>
+		<script type="text/javascript" src="js/sessionSelector.js"></script>
+		<script type="text/javascript" src="js/selection.js"></script>
+		<script type="text/javascript" src="js/transcriptContextMenu.js"></script>
+		<script type="text/javascript" src="js/utils.js"></script-->
+	</head>
+	<body>
+		<center><h3>TS Tagging Module</h3></center>
+		<hr/>
+		<div id="session-selector">
+			<form id="load-session-form" action="new TS.TranscriptArea.loadSessionHTML(new TS.DatabaseManager, document.getElementById("session-id-input").value)">
+				<table>
+					<tr>
+						<td>
+							<label>Enter session ID: </label>
+							<input id="session-id-input" type="text" size="8"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="javascript: submitform()">Load</a>
+							<!--button type="button" id="load-button">Load</button-->
+							<!--button type="button" id="save-button">Save</button-->
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<hr/>
+		<div id="transcript"></div>
+
+		<script type="text/javascript">
+		function submitform() {
+			TranscriptArea.loadSessionHTML(DatabaseManager, document.getElementById("session-id-input").value);
+		}
+		</script>
+	</body>
+</html>

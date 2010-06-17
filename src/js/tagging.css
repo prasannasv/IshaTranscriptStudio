@@ -1,0 +1,81 @@
+#transcript .content{
+  display:inline;
+  line-height: 1.6em; 
+  font-size: 1em; 
+  font-family: verdana, arial, sans-serif;
+}
+
+#transcript .content[data-emphasis="true"]{
+  font-style:italic;
+}
+
+#transcript .content[data-spokenLanguage="tamil"]{
+  color:blue;
+}
+
+#transcript .superContent {
+  display:inline;
+  font-size:large;
+  font-weight:bold;
+  color:green;
+}
+
+#transcript .superContent > .superContent{
+  font-size:larger;
+}
+
+#transcript .superSegment{
+  display:block;
+  margin-top:2em;
+  margin-bottom:2em;
+  margin-left:2em;
+  margin-right:3em;
+}
+
+#transcript .superSegment > .superSegment{
+  display:block;
+  margin-left:4em;
+  margin-right:0;
+}
+
+#transcript .segment{
+  display:block;
+  margin-top:1em;
+}
+
+#transcript .segment:not([data-speaker="sadhguru"]){
+  font-weight:bold;
+}
+
+#transcript .summary{
+  display:none;
+}
+
+#transcript notes{
+  display:none;
+}
+
+#transcript .heading{
+  font-size:1.3em;
+}
+
+#transcript img{
+  display:inline;
+  height:2em;
+  width:2em;
+  vertical-align:middle;
+  margin-right:1em;
+}
+
+#markupDialogContainer{
+  background-color:#efefef;
+}
+
+.yui3-acwidget-content{
+  border:solid;
+  background-color:#efefef;
+}
+
+.yui3-acwidget-content em{
+  background-color:yellow;
+}
